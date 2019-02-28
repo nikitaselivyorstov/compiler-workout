@@ -23,7 +23,7 @@ let evalInstruction configuration instructions =
 		
 		match instructions with
 		| BINOP operator -> (match stack with
-			| y::x::left -> ([Syntax.Expr.calculate operation x y] @ left, conf))
+			| y::x::left -> ([(Syntax.Expr.calculate operation) x y] @ left, conf))
 	    | CONST value -> ([value] @ stack, conf)                 
 		| READ -> (match input with
 			| x::left -> ([x] @ stack, (state, left, output)))
@@ -41,7 +41,7 @@ let evalInstruction configuration instructions =
    Takes a configuration and a program, and returns a configuration as a result
  *)                         
 (*let eval _ = failwith "Not yet implemented"*)
-let eval conf programm = List.fold_left evalInstruction conf programm
+let eval configuration programm = List.fold_left evalInstruction configuration programm
 
 (* Top-level evaluation
 
