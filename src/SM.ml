@@ -22,7 +22,7 @@ let evalInstriction configuration instructions =
 		let (state, input, output) = config in
 	
 		match instructions with
-		| BINOP op -> (match stack with
+		| BINOP operation -> (match stack with
 			| y::x::left -> [Syntax.Expr.calculate operation x y] @ left, config)
 	    | CONST x -> [x] @ stack, config
 		| READ -> (match input with
