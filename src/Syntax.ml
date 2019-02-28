@@ -41,8 +41,30 @@ module Expr =
        Takes a state and an expression, and returns the value of the expression in 
        the given state.
     *)
-    let eval _ = failwith "Not implemented yet"
+    (*let eval _ = failwith "Not implemented yet"*)
+    let intToBool x = x != 0
 
+    let boolToInt y = if y then 1 else 0
+
+    let calculate operation left right = match operation with
+      | "+" -> left + right
+      | "-" -> left - right
+      | "*" -> left * right
+      | "/" -> left / right
+      | "%" -> left mod right
+      | "<" -> boolToInt (left < right)
+      | ">" -> boolToInt (left > right)
+      | "<=" -> boolToInt (left <= right)
+      | ">=" -> boolToInt (left >= right)
+      | "==" -> boolToInt (left == right)
+      | "!=" -> boolToInt (left != right)
+      | "&&" -> boolToInt (intToBool left && intToBool right)
+      | "!!" -> boolToInt (intToBool left || intToBool right)
+
+      let rec eval st ex = match ex with
+      | Const constant -> constant
+      | Var variable -> st variable
+      | Binop(operation, left, right) -> calculate operation (eval st left) (eval st right)
   end
                     
 (* Simple statements: syntax and sematics *)
@@ -65,7 +87,15 @@ module Stmt =
 
        Takes a configuration and a statement, and returns another configuration
     *)
-    let eval _ = failwith "Not implemented yet"
+    (*let eval _ = failwith "Not implemented yet"*)
+    let rec eval config statement = 
+        let (state, input, output) = config in
+        match statement with
+          | Read variable -> (match input with 
+            | x::left -> (Expr.update variable x state, left, output))
+          | Write expression -> (state, input, Expr.eval state expression :: output)
+          | Assign (variable, expression) -> (Expr.update variable (Expr.eval state expression) state), input, output
+          | Seq (current, following) -> eval (eval config current) following;;
                                                          
   end
 
