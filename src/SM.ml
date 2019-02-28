@@ -1,4 +1,4 @@
-open GT       
+open GT      
        
 (* The type for the stack machine instructions *)
 @type insn =
@@ -23,7 +23,7 @@ let evalInstruction configuration instructions =
 		
 		match instructions with
 		| BINOP operator -> (match stack with
-			| y::x::left -> ([(Syntax.Expr.calculate operation) x y] @ left, conf))
+			| y::x::left -> ([Syntax.Expr.calculate operation x y] @ left, conf))
 	    | CONST value -> ([value] @ stack, conf)                 
 		| READ -> (match input with
 			| x::left -> ([x] @ stack, (state, left, output)))
