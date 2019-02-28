@@ -18,18 +18,18 @@ type prg = insn list
 type config = int list * Syntax.Stmt.config
 
 let evalInstruction configuration instructions = 
-		let (stack, config) = configuration in
-		let (state, input, output) = config in
+		let (stack, conf) = configuration in
+		let (state, input, output) = conf in
 		
 		match instructions with
 		| BINOP operator -> (match stack with
-			| y::x::left -> ([(Syntax.Expr.calculate operation) x y]@left, config))
-	    | CONST value -> ([value]@stack, config)                 
+			| y::x::left -> ([(Syntax.Expr.calculate operation) x y] @ left, conf))
+	    | CONST value -> ([value] @ stack, conf)                 
 		| READ -> (match input with
-			| x::left -> ([x]@stack, (state, left, output)))
+			| x::left -> ([x] @ stack, (state, left, output)))
 		| WRITE -> (match stack with
-			| x::left -> (left, (state, input, output@[x])))
-		| LD  variable -> ([state variable]@stack, config)
+			| x::left -> (left, (state, input, output @ [x])))
+		| LD  variable -> ([state variable] @ stack, conf)
 		| ST  variable -> (match stack with
 			| x::left -> (left, (Syntax.Expr.update variable x state, input, output)))
 
@@ -41,7 +41,7 @@ let evalInstruction configuration instructions =
    Takes a configuration and a program, and returns a configuration as a result
  *)                         
 (*let eval _ = failwith "Not yet implemented"*)
-let eval config programm = List.fold_left evalInstruction config programm
+let eval conf programm = List.fold_left evalInstruction conf programm
 
 (* Top-level evaluation
 

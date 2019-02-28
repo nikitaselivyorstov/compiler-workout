@@ -88,14 +88,14 @@ module Stmt =
        Takes a configuration and a statement, and returns another configuration
     *)
     (*let eval _ = failwith "Not implemented yet"*)
-    let rec eval config statement = 
-        let (state, input, output) = config in
+    let rec eval conf statement = 
+        let (state, input, output) = conf in
         match statement with
           | Read variable -> (match input with 
             | x::left -> (Expr.update variable x state, left, output))
           | Write expression -> (state, input, Expr.eval state expression :: output)
           | Assign (variable, expression) -> (Expr.update variable (Expr.eval state expression) state), input, output
-          | Seq (current, following) -> eval (eval config current) following;;
+          | Seq (current, following) -> eval (eval conf current) following;;
                                                          
   end
 
