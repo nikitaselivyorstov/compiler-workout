@@ -24,7 +24,7 @@ let evalInstruction configuration instructions =
 		match instructions with
 		| BINOP operator -> (match stack with
 			| y::x::left -> ([(Syntax.Expr.calculate operation) x y]@left, config))
-	    | CONST value -> ([constant]@stack, config)                 
+	    | CONST value -> ([value]@stack, config)                 
 		| READ -> (match input with
 			| x::left -> ([x]@stack, (state, left, output)))
 		| WRITE -> (match stack with
@@ -32,6 +32,7 @@ let evalInstruction configuration instructions =
 		| LD  variable -> ([state variable]@stack, config)
 		| ST  variable -> (match stack with
 			| x::left -> (left, (Syntax.Expr.update variable x state, input, output)))
+
 
 (* Stack machine interpreter
 
