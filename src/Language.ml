@@ -49,7 +49,7 @@ module Expr =
 
     let boolToInt y = if y then 1 else 0
 
-    let calculate operations = match operations with
+    let calculate operation = match operations with
           | "+"  -> ( + )
           | "-"  -> ( - )
           | "*"  -> ( * )
@@ -77,7 +77,7 @@ module Expr =
          DECIMAL --- a decimal constant [0-9]+ as a string
    
     *)
-    
+
     ostap (
       expr:
           !(Ostap.Util.expr
@@ -124,13 +124,13 @@ module Stmt =
         match statement with
           | Read variable -> (match input with 
             | x::left -> (Expr.update variable x state, left, output))
-          | Write expression -> (state, input, Expr.eval state expression :: output)
+          | Write expression -> (state, input, output @ [Expr.eval state expression])
           | Assign (variable, expression) -> (Expr.update variable (Expr.eval state expression) state), input, output
           | Seq (current, following) -> eval (eval conf current) following;;
 
     (* Statement parser *)
     ostap (
-      line: "read"  "("  x:IDENT        ")" {Read x}
+        line: "read"  "("  x:IDENT        ")" {Read x}
             | "write" "("  e:!(Expr.expr) ")" {Write e}
             | x:IDENT ":=" e:!(Expr.expr)     {Assign (x, e)};
   
