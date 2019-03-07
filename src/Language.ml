@@ -49,7 +49,7 @@ module Expr =
 
     let boolToInt y = if y then 1 else 0
 
-    let calculate operation = match operations with
+    let calculate operation = match operation with
           | "+"  -> ( + )
           | "-"  -> ( - )
           | "*"  -> ( * )
