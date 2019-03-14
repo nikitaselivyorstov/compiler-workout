@@ -101,7 +101,7 @@ let rec compile env scode = match scode with
           let s, env = (env#global x)#pop in
           env, [Mov(s, M (env#loc x))]
         | BINOP op -> 
-          let rhs, lhs, env = env#pop2 in
+          let right, left, env = env#pop2 in
           let result, env = env#allocate in 
           env, match op with
                       | "+" | "-" | "*" -> 
