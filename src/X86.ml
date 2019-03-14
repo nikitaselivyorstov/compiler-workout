@@ -104,7 +104,7 @@ let rec compile env scode = match scode with
           let rhs, lhs, env = env#pop2 in
           let result, env = env#allocate in 
           env, match op with
-          
+
             | "+" | "-" | "*" -> [Mov (left, eax); Binop (op, right, eax); Mov (eax, left)]
             | "/" -> [ Mov (left, eax); Cltd; IDiv right; Mov (eax, result)]
             | "%" -> [Mov (left, eax); Cltd; IDiv right; Mov (edx, result)]
@@ -117,7 +117,7 @@ let rec compile env scode = match scode with
             | "!=" -> [Mov (left, eax); Binop ("cmp", right, eax); Mov (eax, left)] @ [Mov (L 0, eax); Set ("ne", "%al"); Mov (eax, result)]
             | _ -> failwith("Unknown operatorion: " ^ op)
       
-      let env, asm' = compile env scode' in
+      in let env, asm' = compile env scode' in
       env, asm @ asm'
 
 (* A set of strings *)           
